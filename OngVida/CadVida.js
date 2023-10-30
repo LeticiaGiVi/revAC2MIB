@@ -11,7 +11,7 @@ const port = 3000;
 
 //configuração do servidor mongodb
 //conecte o mongodb
-mongoose.connect('mongodb://127.0.0.1:27017/revac2mib', {
+mongoose.connect('mongodb://127.0.0.1:27017/cadvida', {
     useNewUrlParser : true,
     useUnifiedTopology : true,
     serverSelectionTimeoutMS : 20000  
@@ -19,7 +19,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/revac2mib', {
 
 
 //criando a model solicitada
-const PessoaSchema = new mongoose.Schema({
+const UsuarioSchema = new mongoose.Schema({
   
    nome : {type : String},
    email : {type :String, required : true },
@@ -29,11 +29,11 @@ const PessoaSchema = new mongoose.Schema({
    nascimento : {type : Date, required : true}
 });
 
-const Pessoa = mongoose.model("Pessoa", PessoaSchema);
+const Usuario = mongoose.model("Usuario", UsuarioSchema);
 
 //roteamento padrão
 
-app.post("/cadastropessoa", async(req, res)=>{
+app.post("/cadastroOngVida", async(req, res)=>{
     const nome = req.body.nome;
     const email = req.body.email;
     const endereco = req.body.endereco;
@@ -45,7 +45,7 @@ app.post("/cadastropessoa", async(req, res)=>{
         return res.status(400).json({error : "Preenchar todos os campos"});
     }
 
-    const pessoa = new Pessoa({
+    const usuario = new Usuario({
         nome : nome,
         email : email,
         endereco : endereco,
@@ -55,22 +55,22 @@ app.post("/cadastropessoa", async(req, res)=>{
     })
 
     try {
-        const newPessoa = await pessoa.save();
+        const newUsuario = await usuario.save();
 
-        res.json({error : null, msg : "Cadastro feito com sucesso", pessoaId : newPessoa._id});
+        res.json({error : null, msg : "Cadastro feito com sucesso", UsuarioId : newUsuario._id});
     }
     catch(error){
         res.status(400).json({error});
     }
 });
 
-app.get("/cadastropessoa", async(req, res)=>{
-    res.sendFile(__dirname + "/cadastropessoa.html")
+app.get("/cadastroOngVida", async(req, res)=>{
+    res.sendFile(__dirname + "/cadastroOngVida.html")
 })
 
-app.get("/", async(req, res)=>{
-    res.sendFile(__dirname + "/index.html")
-});
+// app.get("/", async(req, res)=>{
+//     res.sendFile(__dirname + "/index.html")
+// });
 
 
 app.listen(port, ()=>{
